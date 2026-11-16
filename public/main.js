@@ -14,7 +14,11 @@ async function callLocalServer(url, prompt) {
   return response
 };
 
-submitBtn.addEventListener("click", async () => {
+async function handleSubmit() {
+  // const loadingMessage = document.createElement("p");
+  // loadingMessage.textContent = "Getting information for you ...";
+  // outputDiv.appendChild(loadingMessage);
+
   userInput = searchBox.value;
 
   const response = await callLocalServer("http://localhost:3000/api/chat", userInput);
@@ -24,4 +28,12 @@ submitBtn.addEventListener("click", async () => {
   const textPlaceholder = document.createElement("p");
   textPlaceholder.textContent = responseText;
   outputDiv.appendChild(textPlaceholder);
-})
+}
+
+submitBtn.addEventListener("click", handleSubmit);
+
+searchBox.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    handleSubmit();
+  }
+});
