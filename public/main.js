@@ -15,9 +15,9 @@ async function callLocalServer(url, prompt) {
 };
 
 async function handleSubmit() {
-  // const loadingMessage = document.createElement("p");
-  // loadingMessage.textContent = "Getting information for you ...";
-  // outputDiv.appendChild(loadingMessage);
+  let textPlaceholder = document.createElement("p");
+  textPlaceholder.textContent = "Getting information for you ...";
+  outputDiv.appendChild(textPlaceholder);
 
   userInput = searchBox.value;
 
@@ -25,9 +25,7 @@ async function handleSubmit() {
 
   const responseText = await response.text();
 
-  const textPlaceholder = document.createElement("p");
   textPlaceholder.textContent = responseText;
-  outputDiv.appendChild(textPlaceholder);
 }
 
 submitBtn.addEventListener("click", handleSubmit);
