@@ -28,19 +28,26 @@ const server = http.createServer(async (req, res) => {
       reqBody += chunk
     };
 
-    const completion = await client.chat.completions.create({
-      model: "zai-org/GLM-5.3",
-      messages: [
-        {
-          role: "user",
-          content: reqBody,
-        },
-      ],
-    });
-    const aiReply = completion.choices[0].message.content;
+    try {
+      const completion = await client.chat.completions.create({
+        model: "zai-org/GLM-5.3",
+        messages: [
+          {
+            role: "user",
+            content: reqBody,
+          },
+        ],
+      });
+      const aiReply = completion.choices[0].message.content;
 
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end(aiReply);
+      res.writeHead(200, { "Content-Type": "text/plain" });
+      res.end(aiReply);
+    } catch (error) {
+      // console.log(error.message);
+      res.end("Request failed");
+    } finally {
+      res.end();
+    };
   } else {
     res.writeHead(404, { "Content-Type": "text/plain" });
     res.end("Not found");
