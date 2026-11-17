@@ -43,8 +43,10 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { "Content-Type": "text/plain" });
       res.end(aiReply);
     } catch (error) {
-      // console.log(error.message);
-      res.end("Request failed");
+      console.log(error.message); // this shows in the terminal
+
+      res.writeHead("502", { "Content-Type": "text/plain" }); // this is sent to the browser in devtools
+      res.end("Something went wrong on Sail API's side and we're working to fix it."); // this shows in the browser
     } finally {
       res.end();
     };
