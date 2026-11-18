@@ -21,6 +21,11 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, { "Content-Type": "text/javascript" });
     res.end(js);
 
+  } else if (req.method === "GET" && req.url === "/styles.css") {
+    const css = await fs.readFile("public/styles.css");
+    res.writeHead(200, { "Content-Type": "text/css" });
+    res.end(css);
+
   } else if (req.method === "POST" && req.url === "/api/chat") {
     let reqBody = "";
 
