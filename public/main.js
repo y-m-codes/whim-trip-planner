@@ -25,7 +25,7 @@ async function handleSubmit() {
 
   const responseText = await response.text();
 
-  textPlaceholder.textContent = responseText;
+  textPlaceholder.setHTML(responseText);
 }
 
 submitBtn.addEventListener("click", handleSubmit);

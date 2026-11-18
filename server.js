@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import http from "node:http";
 import fs from "node:fs/promises";
+import MarkdownIt from 'markdown-it';
 
 const client = new OpenAI({
   baseURL: "https://api.sailresearch.com/v1",
@@ -43,10 +44,13 @@ const server = http.createServer(async (req, res) => {
           },
         ],
       });
-      const aiReply = completion.choices[0].message.content;
+
+      const md = new MarkdownIt();
+      const response = completion.choices[0].message.content;
+      const result = md.render(response);
 
       res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end(aiReply);
+      res.end(result);
     } catch (error) {
       console.log(error); // this shows in the terminal
       console.log(error.message); // this shows in the terminal
