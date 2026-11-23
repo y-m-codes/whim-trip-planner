@@ -5,6 +5,8 @@ const outputDiv = document.getElementById("output-div");
 
 const submitBtn = document.getElementById("submit-btn");
 
+const messages = [];
+
 async function callLocalServer(url, prompt) {
   const response = await fetch(url, {
     method: 'POST',
@@ -21,7 +23,12 @@ async function handleSubmit() {
 
   userInput = searchBox.value;
 
-  const response = await callLocalServer("http://localhost:3000/api/chat", userInput);
+  messages.push( {
+    role: "user",
+    content: userInput,
+  });
+
+  const response = await callLocalServer("http://localhost:3000/api/chat", JSON.stringify(messages));
 
   const responseText = await response.text();
 

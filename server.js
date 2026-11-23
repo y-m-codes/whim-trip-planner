@@ -31,18 +31,15 @@ const server = http.createServer(async (req, res) => {
     let reqBody = "";
 
     for await (const chunk of req) {
-      reqBody += chunk
+      reqBody += chunk;
     };
+
+    const messages = JSON.parse(reqBody);
 
     try {
       const completion = await client.chat.completions.create({
         model: "zai-org/GLM-5.3",
-        messages: [
-          {
-            role: "user",
-            content: reqBody,
-          },
-        ],
+        messages: messages,
       });
 
       const md = new MarkdownIt();
