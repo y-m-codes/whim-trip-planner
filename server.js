@@ -42,12 +42,10 @@ const server = http.createServer(async (req, res) => {
         messages: messages,
       });
 
-      const md = new MarkdownIt();
       const response = completion.choices[0].message.content;
-      const result = md.render(response);
 
       res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end(result);
+      res.end(response);
     } catch (error) {
       console.log(error); // this shows in the terminal
       console.log(error.message); // this shows in the terminal
