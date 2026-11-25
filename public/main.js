@@ -1,3 +1,7 @@
+import MarkdownIt from '/markdown-it.js';
+
+const md = new MarkdownIt();
+
 const searchBox = document.getElementById("search-box");
 let userInput = "";
 
@@ -39,7 +43,9 @@ async function handleSubmit() {
     });
   }
 
-  textPlaceholder.setHTML(responseText);
+  const result = md.render(responseText);
+
+  textPlaceholder.setHTML(result);
 }
 
 submitBtn.addEventListener("click", handleSubmit);

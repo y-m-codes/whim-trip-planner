@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import http from "node:http";
 import fs from "node:fs/promises";
-import MarkdownIt from 'markdown-it';
 
 const client = new OpenAI({
   baseURL: "https://api.sailresearch.com/v1",
@@ -26,6 +25,11 @@ const server = http.createServer(async (req, res) => {
     const css = await fs.readFile("public/styles.css");
     res.writeHead(200, { "Content-Type": "text/css" });
     res.end(css);
+
+  } else if (req.method === "GET" && req.url === "/markdown-it.js") {
+    const mjs = await fs.readFile("node_modules/markdown-it/dist/browser/markdown-it.esm.min.mjs");
+    res.writeHead(200, { "Content-Type": "text/javascript" });
+    res.end(mjs);
 
   } else if (req.method === "POST" && req.url === "/api/chat") {
     let reqBody = "";
