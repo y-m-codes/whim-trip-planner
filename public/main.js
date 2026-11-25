@@ -32,6 +32,13 @@ async function handleSubmit() {
 
   const responseText = await response.text();
 
+  if (response.ok) {
+    messages.push( {
+      role: "assistant",
+      content: responseText,
+    });
+  }
+
   textPlaceholder.setHTML(responseText);
 }
 
