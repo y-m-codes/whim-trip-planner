@@ -53,7 +53,7 @@ const server = http.createServer(async (req, res) => {
       if (error.status === 404 || error.status === undefined) {
         console.log(error.message);
         res.writeHead("502", { "Content-Type": "text/plain" }); // this is sent to the browser in devtools
-        res.end("Something went wrong  and we're working to fix it."); // this shows in the browser
+        res.end("Something went wrong and we're working to fix it."); // this shows in the browser
       } else if (error.status === 401) {
         console.log(error.message);
         res.writeHead("511", { "Content-Type": "text/plain" });
