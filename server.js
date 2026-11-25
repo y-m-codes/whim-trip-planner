@@ -58,6 +58,10 @@ const server = http.createServer(async (req, res) => {
         console.log(error.message);
         res.writeHead("511", { "Content-Type": "text/plain" });
         res.end("Authentication failed.");
+      } else if (error.status === 503) {
+        console.log(error.message);
+        res.writeHead("503", { "Content-Type": "text/plain" });
+        res.end("Service temporarily unavailable. Try again shortly.");
       }
     } finally {
       res.end();
