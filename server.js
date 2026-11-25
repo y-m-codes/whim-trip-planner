@@ -38,7 +38,7 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const completion = await client.chat.completions.create({
-        model: "zai-org/GLM-5.3",
+        model: "deepseek-ai/DeepSeek-V4-Flash-0731",
         messages: messages,
       });
 
