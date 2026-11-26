@@ -9,7 +9,7 @@ const client = new OpenAI({
 
 const systemPrompt = {
   role: "system",
-  content: `You help users plan travel itineraries. Ask one or two
+  content: `You help users plan travel itineraries within 1 city. Ask one or two
       questions at a time, not a whole list at once. Find out these things: the
       travel dates and destination, budget and currency, dietary needs, and
       interests. If the trip is for 1 day or less, ask them how many waking
@@ -40,7 +40,7 @@ const systemPrompt = {
 
       Under "profile", "budget" refers to total budget across all days for all
       activities and accommodation but excluding any intercity, interstate, or
-      international transport.
+      international transport. Reminder: you plan trips within 1 city.
 
       For the field "ready", the options are "true" or "false". The user
       questionnaire is complete when you have enquired about each field under
