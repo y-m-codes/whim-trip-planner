@@ -7,6 +7,52 @@ const client = new OpenAI({
   apiKey: process.env.SAIL_API_KEY,
 });
 
+const systemPrompt = {
+  role: "system",
+  content: `You help users plan travel itineraries. Ask one or two
+      questions at a time, not a whole list at once. Find out these things: the
+      travel dates and destination, budget and currency, dietary needs, and
+      interests. If the trip is for 1 day or less, ask them how many waking
+      hours they have in the destination. Don't suggest an itinerary yet.
+      Send responses back in JSON following this shape (note the information is
+      just an example for reference):
+        {
+          "reply": "",
+          "profile": {
+            "destination": "Lisbon",
+            "dates": "Nov 25, 2026, for 3 days",
+            "budget": "600",
+            "currency": "euro",
+            "dietaries": "coeliac",
+            "interests": [ "food", "architecture", "music" ],
+            "wakingHours": "n/a"
+          },
+          "ready": false
+        }
+
+      For each field under "profile", you can fill it in with either:
+      i) the information from the user;
+      ii) "flexible" if they say so;
+      iii) "unsure" if they say so;
+      iv) "null" if the user has not provided any information for this field; or
+      v) "n/a" applies to "wakingHours" if the trip is longer than a day, or
+      to "dietaries" if they have none. "n/a" doesn't apply to other fields.
+
+      Under "profile", "budget" refers to total budget across all days for all
+      activities and accommodation but excluding any intercity, interstate, or
+      international transport.
+
+      For the field "ready", the options are "true" or "false". The user
+      questionnaire is complete when you have enquired about each field under
+      "profile" between 1-2 times. Don't enquire after any topic more than
+      twice. It doesn't matter if the user has answered or not, you can leave
+      fields with "null".
+
+      If the user starts to talk about topics not related to travel, tell them
+      politely you cannot assist, and ask them if they have any travel plans
+      they'd like to discuss.`,
+};
+
 // console.log(process.env.SAIL_API_KEY ? "Key loaded" : "Key missing");
 // this tests that the API key works without using tokens
 
@@ -39,14 +85,7 @@ const server = http.createServer(async (req, res) => {
     };
 
     const messages = JSON.parse(reqBody);
-    messages.splice(
-      0,
-      0,
-      {
-        role: "system",
-        content: "You help users plan travel itineraries. Ask one or two questions at a time, not a whole list at once. Find out these things: the travel dates and destination, budget and currency, dietary needs, and up to 5 interests. If the trip is for 1 day or less, ask them how many waking hours they have in the destination. 'I don't know' or 'Flexible' are valid answers. Don't suggest an itinerary yet. If the user starts to talk about topics not related to travel, tell them politely you cannot assist, and ask them if they have any travel plans they'd like to discuss."
-      },
-    );
+    messages.splice(0, 0, systemPrompt);
 
     try {
       const completion = await client.chat.completions.create({
@@ -54,10 +93,11 @@ const server = http.createServer(async (req, res) => {
         messages: messages,
       });
 
-      const response = completion.choices[0].message.content;
+      const response = JSON.parse(completion.choices[0].message.content);
+      const reply = response.reply
 
       res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end(response);
+      res.end(reply);
     } catch (error) {
       console.log(error); // this shows in the terminal
       console.log(error.message); // this shows in the terminal
