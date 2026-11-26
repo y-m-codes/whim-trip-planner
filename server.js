@@ -39,6 +39,14 @@ const server = http.createServer(async (req, res) => {
     };
 
     const messages = JSON.parse(reqBody);
+    messages.splice(
+      0,
+      0,
+      {
+        role: "system",
+        content: "You help users plan travel itineraries. Ask one or two questions at a time, not a whole list at once. Find out these things: the travel dates and destination, budget and currency, dietary needs, and up to 5 interests. If the trip is for 1 day or less, ask them how many waking hours they have in the destination. 'I don't know' or 'Flexible' are valid answers. Don't suggest an itinerary yet. If the user starts to talk about topics not related to travel, tell them politely you cannot assist, and ask them if they have any travel plans they'd like to discuss."
+      },
+    );
 
     try {
       const completion = await client.chat.completions.create({
