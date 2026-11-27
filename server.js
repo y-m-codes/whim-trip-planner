@@ -7,7 +7,7 @@ const client = new OpenAI({
   apiKey: process.env.SAIL_API_KEY,
 });
 
-const systemPrompt = {
+const interviewPrompt = {
   role: "system",
   content: `You help users plan travel itineraries within 1 city. Ask one or two
       questions at a time, not a whole list at once. Find out these things: the
@@ -43,14 +43,12 @@ const systemPrompt = {
       international transport. Reminder: you plan trips within 1 city.
 
       For the field "ready", the options are "true" or "false". The user
-      questionnaire is complete when you have enquired about each field under
-      "profile" between 1-2 times. Don't enquire after any topic more than
-      twice. It doesn't matter if the user has answered or not, you can leave
-      fields with "null".
+      questionnaire is "ready" when each field is either answered, or has been
+      asked twice without an answer. Don't enquire after any topic more than
+      twice.
 
       If the user starts to talk about topics not related to travel, tell them
-      politely you cannot assist, and ask them if they have any travel plans
-      they'd like to discuss.`,
+      politely you cannot assist, and redirect them to the topic of travel.`,
 };
 
 // console.log(process.env.SAIL_API_KEY ? "Key loaded" : "Key missing");
@@ -85,7 +83,7 @@ const server = http.createServer(async (req, res) => {
     };
 
     const messages = JSON.parse(reqBody);
-    messages.splice(0, 0, systemPrompt);
+    messages.splice(0, 0, interviewPrompt);
 
     try {
       const completion = await client.chat.completions.create({
@@ -94,7 +92,7 @@ const server = http.createServer(async (req, res) => {
       });
 
       const response = JSON.parse(completion.choices[0].message.content);
-      const reply = response.reply
+      const reply = response.reply;
 
       res.writeHead(200, { "Content-Type": "text/plain" });
       res.end(reply);
