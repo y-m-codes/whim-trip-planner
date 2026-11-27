@@ -11,30 +11,15 @@ const interviewPrompt = {
   role: "system",
   content: `You help users plan travel itineraries within 1 city. Ask one or two
       questions at a time, not a whole list at once. Find out these things: the
-      travel dates and destination, budget and currency, dietary needs, and
-      interests. If the trip is for 1 day or less, ask them how many waking
+      start and end dates, travel destination, budget and currency, dietary needs,
+      and interests. If the trip is for 1 day or less, ask them how many waking
       hours they have in the destination. Don't suggest an itinerary yet.
-      Send responses back in JSON following this shape (note the information is
-      just an example for reference):
-        {
-          "reply": "",
-          "profile": {
-            "destination": "Lisbon",
-            "dates": "Nov 25, 2026, for 3 days",
-            "budget": "600",
-            "currency": "euro",
-            "dietaries": "coeliac",
-            "interests": [ "food", "architecture", "music" ],
-            "wakingHours": "n/a"
-          },
-          "ready": false
-        }
 
       For each field under "profile", you can fill it in with either:
       i) the information from the user;
       ii) "flexible" if they say so;
       iii) "unsure" if they say so;
-      iv) "null" if the user has not provided any information for this field; or
+      iv) null if the user has not provided any information for this field; or
       v) "n/a" applies to "wakingHours" if the trip is longer than a day, or
       to "dietaries" if they have none. "n/a" doesn't apply to other fields.
 
@@ -42,7 +27,11 @@ const interviewPrompt = {
       activities and accommodation but excluding any intercity, interstate, or
       international transport. Reminder: you plan trips within 1 city.
 
-      For the field "ready", the options are "true" or "false". The user
+      Under "profile", for "startDate" and "finishDate", follow this format:
+      DD-MM-YYYY. If they give you a start date and a duration, calculate the
+      end date.
+
+      For the field "ready", the options are true or false. The user
       questionnaire is "ready" when each field is either answered, or has been
       asked twice without an answer. Don't enquire after any topic more than
       twice.
@@ -50,6 +39,32 @@ const interviewPrompt = {
       If the user starts to talk about topics not related to travel, tell them
       politely you cannot assist, and redirect them to the topic of travel.`,
 };
+
+const interviewSchema = {
+  description: "Information for assistant to gather through user interview",
+  type: "object",
+  properties: {
+    reply: { type: "string" },
+    profile: {
+      type: "object",
+      properties: {
+        destination: { type: [ "string", "null"] },
+        startDate: { type: [ "string", "null"] },
+        finishDate: { type: [ "string", "null"] },
+        budget: { type: [ "string", "null"] },
+        currency: { type: [ "string", "null"] },
+        dietaries: { type: [ "array", "null" ], items: { type: "string" } },
+        interests: { type: [ "array", "null"], items: { type: "string" } },
+        wakingHours: { type: [ "string", "null" ] },
+      },
+      required: [ "destination", "startDate", "finishDate", "budget", "currency", "dietaries", "interests", "wakingHours" ],
+      additionalProperties: false,
+    },
+    ready: { type: "boolean" },
+  },
+  required: [ "reply", "profile", "ready"],
+  additionalProperties: false,
+}
 
 // console.log(process.env.SAIL_API_KEY ? "Key loaded" : "Key missing");
 // this tests that the API key works without using tokens
@@ -89,6 +104,14 @@ const server = http.createServer(async (req, res) => {
       const completion = await client.chat.completions.create({
         model: "deepseek-ai/DeepSeek-V4-Flash-0731",
         messages: messages,
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "interview",
+            strict: true,
+            schema: interviewSchema,
+          }
+        }
       });
 
       const response = JSON.parse(completion.choices[0].message.content);
