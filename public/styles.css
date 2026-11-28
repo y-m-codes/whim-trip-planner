@@ -6,3 +6,11 @@
 .rectangle {
   border-radius: 5px;
 }
+
+.message-bubble {
+  background-color: lightskyblue;
+  width: 500px;
+  min-height: 20px;
+  padding: 5px;
+  margin: 10px;
+}

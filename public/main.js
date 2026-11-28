@@ -21,11 +21,16 @@ async function callLocalServer(url, prompt) {
 };
 
 async function handleSubmit() {
+  userInput = searchBox.value;
+
+  const messageBubble = document.createElement("div");
+  messageBubble.classList.add("message-bubble", "rectangle");
+  messageBubble.textContent = userInput;
+  outputDiv.appendChild(messageBubble);
+
   let textPlaceholder = document.createElement("p");
   textPlaceholder.textContent = "Curating information just for you ...";
   outputDiv.appendChild(textPlaceholder);
-
-  userInput = searchBox.value;
 
   messages.push( {
     role: "user",
