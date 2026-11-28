@@ -52,6 +52,7 @@ submitBtn.addEventListener("click", handleSubmit);
 
 searchBox.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     handleSubmit();
   }
 });
