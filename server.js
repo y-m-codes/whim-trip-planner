@@ -14,7 +14,9 @@ const interviewPrompt = {
       start and end dates, travel destination, budget and currency, dietary needs,
       and interests. If the start and finish dates are the same or consecutive,
       then ask them for their arrival time (on start date) and departure time
-      (on finish date). Don't suggest an itinerary yet.
+      (on finish date). Don't suggest an itinerary yet. Don't assist with planning
+      accommodation, or intercity, interstate, or international travel. Focus on
+      daily activities to explore the city based on the user's interests.
 
       For each field under "profile", you can fill it in with either:
       i) the information from the user;
@@ -26,8 +28,8 @@ const interviewPrompt = {
       if they have none. "n/a" doesn't apply to other fields.
 
       Under "profile", "budget" refers to total budget across all days for all
-      activities and accommodation but excluding any intercity, interstate, or
-      international transport. Reminder: you plan trips within 1 city.
+      activities and meals but excluding accommodation and any intercity,
+      interstate, or international transport.
 
       Under "profile", for "startDate" and "finishDate", store the dates in this
       format: DD-MM-YYYY. If they give you a start date and a duration,
