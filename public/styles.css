@@ -1,5 +1,8 @@
 #search-box {
   width: 500px;
   height: 100px;
+}
+
+.rectangle {
   border-radius: 5px;
 }
