@@ -22,7 +22,7 @@ async function callLocalServer(url, prompt) {
 
 async function handleSubmit() {
   let textPlaceholder = document.createElement("p");
-  textPlaceholder.textContent = "Getting information for you ...";
+  textPlaceholder.textContent = "Curating information just for you ...";
   outputDiv.appendChild(textPlaceholder);
 
   userInput = searchBox.value;
