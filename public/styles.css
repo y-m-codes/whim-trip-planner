@@ -1,10 +1,20 @@
 * {
-  font-family:Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  box-sizing: border-box
 }
 
-#search-box {
-  width: 500px;
-  height: 100px;
+h1 {
+  color: #630943;
+  margin: 20px;
+  font-size: 3rem;
+  margin-top: 80px;
+}
+
+body {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  background: antiquewhite;
 }
 
 .rectangle {
@@ -12,9 +22,56 @@
 }
 
 .message-bubble {
-  background-color: lightskyblue;
-  width: 500px;
+  background-color: #c491b2;
+  width: 50%;
+  margin-left: auto;
   min-height: 20px;
   padding: 5px;
-  margin: 10px;
+}
+
+.text {
+text-align: center;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+#search-box {
+  flex: 1;
+  resize: none;
+  /* width: 500px; */
+  height: 100px;
+}
+
+#search-box:focus {
+  border-color: #630943;
+  outline: #630943
+}
+
+#output-div {
+  flex: 1;
+  overflow-y: auto;
+}
+
+#input-div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 20px 80px 20px;
+}
+
+#subtitle {
+  font-style: italic;
+  color:dimgray
+}
+
+#submit-btn {
+  background-color: #630943;
+  color: antiquewhite;
+  padding: 5px;
 }

@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Trip Planner</title>
+  <title>Roam: AI-Powered Travel Planner Just For You</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Roam</h1>
-  <p>Pick a city and tell me what your interests are. I'll ask you some more
-    questions and generate an itinerary tailored to you.</p>
-    <div id="input-div">
-      <textarea rows="3" cols="50" class="rectangle" id="search-box" placeholder="Dive into a city the way you want to."></textarea>
-
-      <button class="rectangle" id="submit-btn">Submit</button>
-    </div>
+  <main id="wrapper">
+    <h1 class="text">roam</h1>
+    <p id="subtitle" class="text">Pick a city and tell me what your interests are.<br>
+      I'll ask you some more
+      questions and generate an itinerary tailored to you.</p>
 
     <div id="output-div">
-
     </div>
+
+    <div id="input-div">
+      <textarea class="rectangle" id="search-box" placeholder="Dive into a city the way you want to."></textarea>
+      <button class="rectangle" id="submit-btn">Submit</button>
+    </div>
+  </main>
   <script type="module" src="main.js"></script>
 </body>
 </html>

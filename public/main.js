@@ -27,6 +27,7 @@ async function handleSubmit() {
   messageBubble.classList.add("message-bubble", "rectangle");
   messageBubble.textContent = userInput;
   outputDiv.appendChild(messageBubble);
+  messageBubble.scrollIntoView(false);
 
   let textPlaceholder = document.createElement("p");
   textPlaceholder.textContent = "Curating information just for you ...";
@@ -51,6 +52,7 @@ async function handleSubmit() {
   const result = md.render(responseText);
 
   textPlaceholder.setHTML(result);
+  textPlaceholder.scrollIntoView(false);
 }
 
 submitBtn.addEventListener("click", handleSubmit);
