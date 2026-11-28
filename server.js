@@ -12,24 +12,31 @@ const interviewPrompt = {
   content: `You help users plan travel itineraries within 1 city. Ask one or two
       questions at a time, not a whole list at once. Find out these things: the
       start and end dates, travel destination, budget and currency, dietary needs,
-      and interests. If the trip is for 1 day or less, ask them how many waking
-      hours they have in the destination. Don't suggest an itinerary yet.
+      and interests. If the start and finish dates are the same or consecutive,
+      then ask them for their arrival time (on start date) and departure time
+      (on finish date). Don't suggest an itinerary yet.
 
       For each field under "profile", you can fill it in with either:
       i) the information from the user;
       ii) "flexible" if they say so;
       iii) "unsure" if they say so;
       iv) null if the user has not provided any information for this field; or
-      v) "n/a" applies to "wakingHours" if the trip is longer than a day, or
-      to "dietaries" if they have none. "n/a" doesn't apply to other fields.
+      v) "n/a" applies to "arrivalTime" and "departureTime" if the trip start
+      date and finish date are not the same nor consecutive, or to "dietaries"
+      if they have none. "n/a" doesn't apply to other fields.
 
       Under "profile", "budget" refers to total budget across all days for all
       activities and accommodation but excluding any intercity, interstate, or
       international transport. Reminder: you plan trips within 1 city.
 
-      Under "profile", for "startDate" and "finishDate", follow this format:
-      DD-MM-YYYY. If they give you a start date and a duration, calculate the
-      end date.
+      Under "profile", for "startDate" and "finishDate", store the dates in this
+      format: DD-MM-YYYY. If they give you a start date and a duration,
+      calculate the end date.
+
+      Under "profile", for "arrivalTime" and "departureTime", follow this
+      format: 24-hour HH:MM. However they can give you the time in any format,
+      e.g. they can say "5pm" or "5 in the afternoon" or "5:00pm" or "17:00" and
+      you translate and store it in the correct format.
 
       For the field "ready", the options are true or false. The user
       questionnaire is "ready" when each field is either answered, or has been
@@ -55,9 +62,10 @@ const interviewSchema = {
         currency: { type: [ "string", "null"] },
         dietaries: { type: [ "array", "null" ], items: { type: "string" } },
         interests: { type: [ "array", "null"], items: { type: "string" } },
-        wakingHours: { type: [ "string", "null" ] },
+        arrivalTime: { type: [ "string", "null" ] },
+        departureTime: { type: [ "string", "null" ] },
       },
-      required: [ "destination", "startDate", "finishDate", "budget", "currency", "dietaries", "interests", "wakingHours" ],
+      required: [ "destination", "startDate", "finishDate", "budget", "currency", "dietaries", "interests", "arrivalTime", "departureTime" ],
       additionalProperties: false,
     },
     ready: { type: "boolean" },
