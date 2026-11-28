@@ -55,5 +55,6 @@ searchBox.addEventListener("keydown", (event) => {
     event.preventDefault();
     handleSubmit();
     searchBox.value = "";
+    searchBox.focus();
   }
 });
